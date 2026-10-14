@@ -1,0 +1,14 @@
+check,field,path,A_count,A_value,B_count,B_value
+C1,phase,protocolSection.designModule.phases,1,PHASE3,1,PHASE3
+C2,minimum age,protocolSection.eligibilityModule.minimumAge,-,16 Years,-,18 Years
+C3,maximum age,protocolSection.eligibilityModule.maximumAge,-,70 Years,-,70 Years
+C4,sex eligible,protocolSection.eligibilityModule.sex,-,ALL,-,ALL
+C5,main measurement,protocolSection.outcomesModule.primaryOutcomes[0].measure,-,Change From Baseline to Week 12 in Mean Sleep Latency From the 4 Maintenance of Wakefulness Test (MWT) Wake Trials,-,Change in mean sleep latency (MSL) on Maintenance of Wakefulness Test (MWT) from baseline to Week 12 by dose level
+C6,measurement timing,protocolSection.outcomesModule.primaryOutcomes[0].timeFrame,-,"Baseline, Week 12",-,Baseline to Week 12
+C7a,masking,protocolSection.designModule.designInfo.maskingInfo.masking,-,DOUBLE,-,TRIPLE
+C7b,who masked,protocolSection.designModule.designInfo.maskingInfo.whoMasked,2,"PARTICIPANT, INVESTIGATOR",3,"PARTICIPANT, CARE_PROVIDER, INVESTIGATOR"
+C8,arm types,protocolSection.armsInterventionsModule.armGroups[].type,3,"PLACEBO_COMPARATOR, EXPERIMENTAL, EXPERIMENTAL",3,"PLACEBO_COMPARATOR, EXPERIMENTAL, EXPERIMENTAL"
+C9,results posted,protocolSection.statusModule.resultsFirstPostDateStruct.date,-,2026-08-31,-,ABSENT
+C10,method described,protocolSection.outcomesModule.primaryOutcomes[0].description,-,"The MWT evaluates a person's ability to remain awake under soporific conditions for a defined period of time. Because there is no biological measure of wakefulness, wakefulness is measured indirectly by the inability or delayed tendency to fall asleep. This tendency to fall asleep is measured via electroencephalography-derived sleep latency in the MWT. The MWT consists of four 40-minute sessions (trials) done 2 hours apart. Sleep latency in each session was recorded. Participants were required to stay awake in between the four sessions. A positive change from baseline indicates an improvement. The linear mixed effects model for repeated measures (MMRM) was used for analysis.",-,ABSENT
+C11a,document labels,documentSection.largeDocumentModule.largeDocs[].label,2,"Study Protocol, Statistical Analysis Plan",-,ABSENT
+C11b,document dates,documentSection.largeDocumentModule.largeDocs[].date,2,"2024-10-23, 2025-05-26",-,ABSENT

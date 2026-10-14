@@ -1,0 +1,656 @@
+{
+  "protocolSection": {
+    "identificationModule": {
+      "nctId": "NCT07455383",
+      "orgStudyIdInfo": {
+        "id": "ALKS 2680-302"
+      },
+      "organization": {
+        "fullName": "Alkermes, Inc.",
+        "class": "INDUSTRY"
+      },
+      "briefTitle": "A Study to Evaluate the Efficacy and Safety of ALKS 2680 in Adults With Narcolepsy Type 1",
+      "officialTitle": "A Phase 3, Randomized, Double-Blind, Placebo-Controlled Study to Evaluate the Efficacy and Safety of ALKS 2680 in Adults With Narcolepsy Type 1 (Brilliance NT1 Study 302)",
+      "acronym": "Brilliance NT1"
+    },
+    "statusModule": {
+      "statusVerifiedDate": "2026-08",
+      "overallStatus": "RECRUITING",
+      "expandedAccessInfo": {
+        "hasExpandedAccess": false
+      },
+      "startDateStruct": {
+        "date": "2026-04-06",
+        "type": "ACTUAL"
+      },
+      "primaryCompletionDateStruct": {
+        "date": "2027-05",
+        "type": "ESTIMATED"
+      },
+      "completionDateStruct": {
+        "date": "2027-06",
+        "type": "ESTIMATED"
+      },
+      "studyFirstSubmitDate": "2026-03-03",
+      "studyFirstSubmitQcDate": "2026-03-03",
+      "studyFirstPostDateStruct": {
+        "date": "2026-03-06",
+        "type": "ACTUAL"
+      },
+      "lastUpdateSubmitDate": "2026-08-05",
+      "lastUpdatePostDateStruct": {
+        "date": "2026-08-07",
+        "type": "ACTUAL"
+      }
+    },
+    "sponsorCollaboratorsModule": {
+      "responsibleParty": {
+        "type": "SPONSOR"
+      },
+      "leadSponsor": {
+        "name": "Alkermes, Inc.",
+        "class": "INDUSTRY"
+      }
+    },
+    "oversightModule": {
+      "oversightHasDmc": true,
+      "isFdaRegulatedDrug": true,
+      "isFdaRegulatedDevice": false
+    },
+    "descriptionModule": {
+      "briefSummary": "The purpose of this study is to measure decreases in daytime sleepiness, cataplexy (sudden loss of muscle tone), and disease symptoms in participants with NT1 when taking ALKS 2680 tablets compared with placebo tablets."
+    },
+    "conditionsModule": {
+      "conditions": [
+        "Narcolepsy Type 1"
+      ],
+      "keywords": [
+        "Brillance",
+        "Narcolepsy",
+        "Narcolepsy Type 1",
+        "Sleep Disorders",
+        "Fatigue",
+        "Cataplexy",
+        "ALKS 2680",
+        "Alixorexton",
+        "Orexin-2 receptor agonist",
+        "excessive daytime sleepiness"
+      ]
+    },
+    "designModule": {
+      "studyType": "INTERVENTIONAL",
+      "phases": [
+        "PHASE3"
+      ],
+      "designInfo": {
+        "allocation": "RANDOMIZED",
+        "interventionModel": "PARALLEL",
+        "primaryPurpose": "TREATMENT",
+        "maskingInfo": {
+          "masking": "TRIPLE",
+          "whoMasked": [
+            "PARTICIPANT",
+            "CARE_PROVIDER",
+            "INVESTIGATOR"
+          ]
+        }
+      },
+      "enrollmentInfo": {
+        "count": 150,
+        "type": "ESTIMATED"
+      }
+    },
+    "armsInterventionsModule": {
+      "armGroups": [
+        {
+          "label": "Placebo",
+          "type": "PLACEBO_COMPARATOR",
+          "description": "Placebo arm",
+          "interventionNames": [
+            "Drug: Placebo"
+          ]
+        },
+        {
+          "label": "ALKS 2680 Dose 1",
+          "type": "EXPERIMENTAL",
+          "description": "Oral tablet containing ALKS 2680",
+          "interventionNames": [
+            "Drug: ALKS 2680 Dose 1"
+          ]
+        },
+        {
+          "label": "ALKS 2680 Dose 2",
+          "type": "EXPERIMENTAL",
+          "description": "Oral tablet containing ALKS 2680",
+          "interventionNames": [
+            "Drug: ALKS 2680 Dose 2"
+          ]
+        }
+      ],
+      "interventions": [
+        {
+          "type": "DRUG",
+          "name": "ALKS 2680 Dose 1",
+          "description": "Participants will receive ALKS 2680 tablets, orally, daily, for 12 weeks",
+          "armGroupLabels": [
+            "ALKS 2680 Dose 1"
+          ],
+          "otherNames": [
+            "Alixorexton"
+          ]
+        },
+        {
+          "type": "DRUG",
+          "name": "ALKS 2680 Dose 2",
+          "description": "Participants will receive ALKS 2680 tablets, orally, daily, for 12 weeks",
+          "armGroupLabels": [
+            "ALKS 2680 Dose 2"
+          ],
+          "otherNames": [
+            "Alixorexton"
+          ]
+        },
+        {
+          "type": "DRUG",
+          "name": "Placebo",
+          "description": "Participants will receive ALKS 2680-matching placebo tablets, orally, for 12 weeks.",
+          "armGroupLabels": [
+            "Placebo"
+          ]
+        }
+      ]
+    },
+    "outcomesModule": {
+      "primaryOutcomes": [
+        {
+          "measure": "Change in mean sleep latency (MSL) on Maintenance of Wakefulness Test (MWT) from baseline to Week 12 by dose level",
+          "timeFrame": "Baseline to Week 12"
+        }
+      ],
+      "secondaryOutcomes": [
+        {
+          "measure": "Change in Epworth Sleepiness Scale (ESS) from baseline to Week 12 by dose level",
+          "timeFrame": "Baseline to Week 12"
+        },
+        {
+          "measure": "Weekly cataplexy rate (WCR) at Week 12 by dose level",
+          "timeFrame": "Week 12"
+        },
+        {
+          "measure": "Percentage of participants who achieve a status of \"none\" or \"mild\" on Patient Global Impression- Severity (PGI-S) scale (general disease) at Week 12 by dose level",
+          "timeFrame": "Week 12"
+        },
+        {
+          "measure": "Change in British Columbia Cognitive Complaints Inventory (BC-CCI) from baseline to Week 12 by dose level",
+          "timeFrame": "Baseline to Week 12"
+        },
+        {
+          "measure": "Change in number of lapses on Psychomotor Vigilance Task (PVT) from baseline to Week 12 by dose level",
+          "timeFrame": "Baseline to Week 12"
+        },
+        {
+          "measure": "Change in Patient-Reported Outcomes Measurement Information System - Fatigue 6a (PROMIS Fatigue 6a) from baseline to Week 12 by dose level",
+          "timeFrame": "Baseline to Week 12"
+        },
+        {
+          "measure": "Percentage of participants who achieve a status of \"normal, not ill at all\", \"borderline ill\", or \"mildly ill\" on Clinical Global Impression-Severity (CGI-S) (general disease) at Week 12 by dose level",
+          "timeFrame": "Week 12"
+        },
+        {
+          "measure": "Change in Narcolepsy Severity Scale for Clinical Trials (NSS-CT) from baseline to Week 12 by dose level",
+          "timeFrame": "Baseline to Week 12"
+        },
+        {
+          "measure": "Incidence of treatment emergent adverse events",
+          "timeFrame": "Up to 14 weeks"
+        }
+      ]
+    },
+    "eligibilityModule": {
+      "eligibilityCriteria": "Inclusion Criteria:\n\n* Meets the diagnostic criteria of NT1 according to ICSD-3-TR guidelines, confirmed by diagnostic evaluations (either PSG/MSLT\\* or CSF hypocretin-1 level).\n\nExclusion Criteria:\n\n* Has another comorbid sleep disorder or condition that may influence the sleep-wake cycle.\n* Has a history or presence at Visit 1 of other clinically significant (treated or untreated) illness, disease, abnormality, or surgical procedure that, in the opinion of the Investigator, might compromise participant safety, interfere with any study assessment, or affect the participant's ability to complete the study.\n* Is currently enrolled in another interventional clinical trial or has received any investigational drug or used any interventional investigational device within 30 days prior to Visit 1. Participants previously enrolled in Study ALKS 2680-201 are not eligible for enrollment.\n* Is currently pregnant, breastfeeding, or is planning to become pregnant during the study",
+      "healthyVolunteers": false,
+      "sex": "ALL",
+      "minimumAge": "18 Years",
+      "maximumAge": "70 Years",
+      "stdAges": [
+        "ADULT",
+        "OLDER_ADULT"
+      ]
+    },
+    "contactsLocationsModule": {
+      "centralContacts": [
+        {
+          "name": "Director, Clinical Trial Manager",
+          "role": "CONTACT",
+          "phone": "888-235-8008 (US Only)",
+          "email": "clinicaltrials@alkermes.com"
+        },
+        {
+          "name": "Director, Clinical Trial Manager",
+          "role": "CONTACT",
+          "phone": "571-599-2702 (Global)",
+          "email": "clinicaltrials@alkermes.com"
+        }
+      ],
+      "overallOfficials": [
+        {
+          "name": "Medical Director, MD",
+          "affiliation": "Alkermes, Inc.",
+          "role": "STUDY_DIRECTOR"
+        }
+      ],
+      "locations": [
+        {
+          "facility": "Alkermes Investigational Site",
+          "status": "RECRUITING",
+          "city": "Cullman",
+          "state": "Alabama",
+          "zip": "35055",
+          "country": "United States",
+          "geoPoint": {
+            "lat": 34.17482,
+            "lon": -86.84361
+          }
+        },
+        {
+          "facility": "Alkermes Investigational Site",
+          "status": "RECRUITING",
+          "city": "Phoenix",
+          "state": "Arizona",
+          "zip": "85054",
+          "country": "United States",
+          "geoPoint": {
+            "lat": 33.44838,
+            "lon": -112.07404
+          }
+        },
+        {
+          "facility": "Alkermes Investigational Site",
+          "status": "RECRUITING",
+          "city": "Los Angeles",
+          "state": "California",
+          "zip": "90025",
+          "country": "United States",
+          "geoPoint": {
+            "lat": 34.05223,
+            "lon": -118.24368
+          }
+        },
+        {
+          "facility": "Alkermes Investigational Site",
+          "status": "RECRUITING",
+          "city": "Boulder",
+          "state": "Colorado",
+          "zip": "80301",
+          "country": "United States",
+          "geoPoint": {
+            "lat": 40.01499,
+            "lon": -105.27055
+          }
+        },
+        {
+          "facility": "Alkermes Investigational Site",
+          "status": "RECRUITING",
+          "city": "Brandon",
+          "state": "Florida",
+          "zip": "33511",
+          "country": "United States",
+          "geoPoint": {
+            "lat": 27.9378,
+            "lon": -82.28592
+          }
+        },
+        {
+          "facility": "Alkermes Investigational Site",
+          "status": "RECRUITING",
+          "city": "Miami",
+          "state": "Florida",
+          "zip": "33176",
+          "country": "United States",
+          "geoPoint": {
+            "lat": 25.77427,
+            "lon": -80.19366
+          }
+        },
+        {
+          "facility": "Alkermes Investigational Site",
+          "status": "RECRUITING",
+          "city": "Winter Park",
+          "state": "Florida",
+          "zip": "32789",
+          "country": "United States",
+          "geoPoint": {
+            "lat": 28.6,
+            "lon": -81.33924
+          }
+        },
+        {
+          "facility": "Alkermes Investigational Site",
+          "status": "RECRUITING",
+          "city": "Macon",
+          "state": "Georgia",
+          "zip": "31210",
+          "country": "United States",
+          "geoPoint": {
+            "lat": 32.84069,
+            "lon": -83.6324
+          }
+        },
+        {
+          "facility": "Alkermes Investigational Site",
+          "status": "RECRUITING",
+          "city": "Kansas City",
+          "state": "Kansas",
+          "zip": "66160",
+          "country": "United States",
+          "geoPoint": {
+            "lat": 39.11417,
+            "lon": -94.62746
+          }
+        },
+        {
+          "facility": "Alkermes Investigational Site",
+          "status": "RECRUITING",
+          "city": "Newton",
+          "state": "Massachusetts",
+          "zip": "02459",
+          "country": "United States",
+          "geoPoint": {
+            "lat": 42.33704,
+            "lon": -71.20922
+          }
+        },
+        {
+          "facility": "Alkermes Investigational Site",
+          "status": "RECRUITING",
+          "city": "Lansing",
+          "state": "Michigan",
+          "zip": "48911",
+          "country": "United States",
+          "geoPoint": {
+            "lat": 42.73253,
+            "lon": -84.55553
+          }
+        },
+        {
+          "facility": "Alkermes Investigational Site",
+          "status": "RECRUITING",
+          "city": "St Louis",
+          "state": "Missouri",
+          "zip": "63123",
+          "country": "United States",
+          "geoPoint": {
+            "lat": 38.62727,
+            "lon": -90.19789
+          }
+        },
+        {
+          "facility": "Alkermes Investigational Site",
+          "status": "RECRUITING",
+          "city": "Middletown",
+          "state": "New Jersey",
+          "zip": "07748",
+          "country": "United States",
+          "geoPoint": {
+            "lat": 40.39428,
+            "lon": -74.11709
+          }
+        },
+        {
+          "facility": "Alkermes Investigational Site",
+          "status": "RECRUITING",
+          "city": "Charlotte",
+          "state": "North Carolina",
+          "zip": "28210",
+          "country": "United States",
+          "geoPoint": {
+            "lat": 35.22709,
+            "lon": -80.84313
+          }
+        },
+        {
+          "facility": "Alkermes Investigational Site",
+          "status": "RECRUITING",
+          "city": "Cincinnati",
+          "state": "Ohio",
+          "zip": "45245",
+          "country": "United States",
+          "geoPoint": {
+            "lat": 39.12711,
+            "lon": -84.51439
+          }
+        },
+        {
+          "facility": "Alkermes Investigational Site",
+          "status": "RECRUITING",
+          "city": "Wyomissing",
+          "state": "Pennsylvania",
+          "zip": "19610",
+          "country": "United States",
+          "geoPoint": {
+            "lat": 40.32954,
+            "lon": -75.96521
+          }
+        },
+        {
+          "facility": "Alkermes Investigational Site",
+          "status": "RECRUITING",
+          "city": "Columbia",
+          "state": "South Carolina",
+          "zip": "29201",
+          "country": "United States",
+          "geoPoint": {
+            "lat": 34.00071,
+            "lon": -81.03481
+          }
+        },
+        {
+          "facility": "Alkermes Investigational Site",
+          "status": "RECRUITING",
+          "city": "Austin",
+          "state": "Texas",
+          "zip": "78731",
+          "country": "United States",
+          "geoPoint": {
+            "lat": 30.26715,
+            "lon": -97.74306
+          }
+        },
+        {
+          "facility": "Alkermes Investigational Site",
+          "status": "RECRUITING",
+          "city": "San Antonio",
+          "state": "Texas",
+          "zip": "78229",
+          "country": "United States",
+          "geoPoint": {
+            "lat": 29.42412,
+            "lon": -98.49363
+          }
+        },
+        {
+          "facility": "Alkermes Investigational Site",
+          "status": "RECRUITING",
+          "city": "Sugar Land",
+          "state": "Texas",
+          "zip": "77478",
+          "country": "United States",
+          "geoPoint": {
+            "lat": 29.61968,
+            "lon": -95.63495
+          }
+        },
+        {
+          "facility": "Alkermes Investigational Site",
+          "status": "RECRUITING",
+          "city": "Macquarie Park",
+          "state": "New South Wales",
+          "zip": "2113",
+          "country": "Australia",
+          "geoPoint": {
+            "lat": -33.78105,
+            "lon": 151.12757
+          }
+        },
+        {
+          "facility": "Alkermes Investigational Site",
+          "status": "RECRUITING",
+          "city": "Namur",
+          "country": "Belgium",
+          "geoPoint": {
+            "lat": 50.4669,
+            "lon": 4.86746
+          }
+        },
+        {
+          "facility": "Alkermes Investigational Site",
+          "status": "RECRUITING",
+          "city": "Markham",
+          "state": "Ontario",
+          "zip": "L3R 1A3",
+          "country": "Canada",
+          "geoPoint": {
+            "lat": 43.86682,
+            "lon": -79.2663
+          }
+        },
+        {
+          "facility": "Alkermes Investigational Site",
+          "status": "RECRUITING",
+          "city": "Toronto",
+          "state": "Ontario",
+          "zip": "M5S 3A3",
+          "country": "Canada",
+          "geoPoint": {
+            "lat": 43.70643,
+            "lon": -79.39864
+          }
+        },
+        {
+          "facility": "Alkermes Investigational Site",
+          "status": "RECRUITING",
+          "city": "Bordeaux",
+          "country": "France",
+          "geoPoint": {
+            "lat": 44.84124,
+            "lon": -0.58046
+          }
+        },
+        {
+          "facility": "Alkermes Investigational Site",
+          "status": "RECRUITING",
+          "city": "Lyon",
+          "country": "France",
+          "geoPoint": {
+            "lat": 45.74906,
+            "lon": 4.84789
+          }
+        },
+        {
+          "facility": "Alkermes Investigational Site",
+          "status": "RECRUITING",
+          "city": "Montpellier",
+          "country": "France",
+          "geoPoint": {
+            "lat": 43.61093,
+            "lon": 3.87635
+          }
+        },
+        {
+          "facility": "Alkermes Investigational Site",
+          "status": "RECRUITING",
+          "city": "Zwolle",
+          "state": "Overijssel",
+          "zip": "8011",
+          "country": "Netherlands",
+          "geoPoint": {
+            "lat": 52.5125,
+            "lon": 6.09444
+          }
+        },
+        {
+          "facility": "Alkermes Investigational Site",
+          "status": "RECRUITING",
+          "city": "Heeze",
+          "zip": "5591 VE",
+          "country": "Netherlands",
+          "geoPoint": {
+            "lat": 51.3828,
+            "lon": 5.57145
+          }
+        }
+      ]
+    },
+    "referencesModule": {
+      "seeAlsoLinks": [
+        {
+          "label": "Brilliance NT1 Studies",
+          "url": "https://www.brilliancestudies.com/"
+        }
+      ]
+    },
+    "ipdSharingStatementModule": {
+      "ipdSharing": "UNDECIDED"
+    }
+  },
+  "derivedSection": {
+    "miscInfoModule": {
+      "versionHolder": "2026-09-02"
+    },
+    "conditionBrowseModule": {
+      "meshes": [
+        {
+          "id": "D009290",
+          "term": "Narcolepsy"
+        },
+        {
+          "id": "D012893",
+          "term": "Sleep Wake Disorders"
+        },
+        {
+          "id": "D005221",
+          "term": "Fatigue"
+        },
+        {
+          "id": "D002385",
+          "term": "Cataplexy"
+        },
+        {
+          "id": "D006970",
+          "term": "Disorders of Excessive Somnolence"
+        }
+      ],
+      "ancestors": [
+        {
+          "id": "D020919",
+          "term": "Sleep Disorders, Intrinsic"
+        },
+        {
+          "id": "D020920",
+          "term": "Dyssomnias"
+        },
+        {
+          "id": "D009422",
+          "term": "Nervous System Diseases"
+        },
+        {
+          "id": "D001523",
+          "term": "Mental Disorders"
+        },
+        {
+          "id": "D009461",
+          "term": "Neurologic Manifestations"
+        },
+        {
+          "id": "D012816",
+          "term": "Signs and Symptoms"
+        },
+        {
+          "id": "D013568",
+          "term": "Pathological Conditions, Signs and Symptoms"
+        }
+      ]
+    }
+  },
+  "hasResults": false
+}
