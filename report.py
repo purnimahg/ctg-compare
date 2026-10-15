@@ -44,6 +44,7 @@ write a report that does not add up.
 Run:  python3 report.py                      render report.md
       python3 report.py --selftest           the six acceptance runs
       python3 report.py --selftest --record  same, tool writes the verdicts
+      python3 report.py --ids NCT1 NCT2      name the pair to compare
 """
 
 import copy
@@ -54,12 +55,14 @@ from collections import Counter, OrderedDict
 from datetime import date, timezone, datetime
 from pathlib import Path
 
+import provenance
 import record
 import check_c2
 import check_s4
 import check_s5
 import check_s6
-from check_s6 import DELETE, lifecycle, set_path
+from check_s6 import (DELETE, P_C9, P_C10, P_C11A, P_C11B, P_MASK,
+                      P_WHO, lifecycle, set_path)
 
 HERE = Path(__file__).resolve().parent
 DATA = HERE / "data"
@@ -129,28 +132,55 @@ def comparisons(a, b):
     s4 = dict((cid, fn) for cid, _, fn in check_s4.CHECKS)
     s6 = dict((cid, fn) for cid, _, fn in check_s6.CHECKS)
 
+    # Each row DECLARES its field path. It used to be recovered by scanning
+    # the checker's display lines for one starting "protocolSection" - and
+    # check_c2 does not print its path in that form, so C2's row read
+    # "(path not reported)" while the README promised every verdict traces to
+    # a field path. Found 15 Oct by S9, on ship day, by reading the rendered
+    # table on an unfamiliar pair rather than by any test.
+    #
+    # ● Provenance must not be RECOVERED FROM THE DISPLAY LAYER. A path
+    # scraped out of rendered text is one formatting change away from
+    # vanishing, and it vanishes silently into a plausible-looking string.
+    # See L10.
+    E = "protocolSection.eligibilityModule."
+    O = "protocolSection.outcomesModule.primaryOutcomes[0]."
     reg = [
-        # cid    category       path-bearing callable
-        ("C1",  PRECONDITION,  "phase",              lambda: s4["C1"](a, b)),
-        ("C8",  PRECONDITION,  "arm types",          lambda: s4["C8"](a, b)),
-        ("C9",  MATURITY,      "results posted",     lambda: s6["C9"](a, b, lv)),
-        ("C10", MATURITY,      "method described",   lambda: s6["C10"](a, b, lv)),
-        ("C11a", MATURITY,     "document labels",    lambda: s6["C11a"](a, b, lv)),
-        ("C11b", MATURITY,     "document dates",     lambda: s6["C11b"](a, b, lv)),
-        ("C2",  COMPARABILITY, "minimum age",        lambda: check_c2.check(a, b)),
-        ("C3",  COMPARABILITY, "maximum age",        lambda: s6["C3"](a, b, lv)),
-        ("C4",  COMPARABILITY, "sex eligible",       lambda: s4["C4"](a, b)),
-        ("C5",  COMPARABILITY, "main measurement",   lambda: check_s5.check("C5", a, b)),
-        ("C6",  COMPARABILITY, "measurement timing", lambda: check_s5.check("C6", a, b)),
-        ("C7a", COMPARABILITY, "masking level",      lambda: s6["C7a"](a, b, lv)),
-        ("C7b", COMPARABILITY, "who was masked",     lambda: s6["C7b"](a, b, lv)),
+        ("C1",  PRECONDITION,  "phase", "protocolSection.designModule.phases",
+         lambda: s4["C1"](a, b)),
+        ("C8",  PRECONDITION,  "arm types",
+         "protocolSection.armsInterventionsModule.armGroups[].type",
+         lambda: s4["C8"](a, b)),
+        ("C9",  MATURITY,      "results posted", P_C9,
+         lambda: s6["C9"](a, b, lv)),
+        ("C10", MATURITY,      "method described", P_C10,
+         lambda: s6["C10"](a, b, lv)),
+        ("C11a", MATURITY,     "document labels", P_C11A,
+         lambda: s6["C11a"](a, b, lv)),
+        ("C11b", MATURITY,     "document dates", P_C11B,
+         lambda: s6["C11b"](a, b, lv)),
+        ("C2",  COMPARABILITY, "minimum age", E + "minimumAge",
+         lambda: check_c2.check(a, b)),
+        ("C3",  COMPARABILITY, "maximum age", E + "maximumAge",
+         lambda: s6["C3"](a, b, lv)),
+        ("C4",  COMPARABILITY, "sex eligible", E + "sex",
+         lambda: s4["C4"](a, b)),
+        ("C5",  COMPARABILITY, "main measurement", O + "measure",
+         lambda: check_s5.check("C5", a, b)),
+        ("C6",  COMPARABILITY, "measurement timing", O + "timeFrame",
+         lambda: check_s5.check("C6", a, b)),
+        ("C7a", COMPARABILITY, "masking level", P_MASK,
+         lambda: s6["C7a"](a, b, lv)),
+        ("C7b", COMPARABILITY, "who was masked", P_WHO,
+         lambda: s6["C7b"](a, b, lv)),
     ]
     out = []
-    for cid, cat, name, fn in reg:
+    for cid, cat, name, path, fn in reg:
         verdict, lines = fn()
-        path = next((l.strip() for l in lines
-                     if l.strip().startswith(("protocolSection", "documentSection"))),
-                    "(path not reported)")
+        if not path.startswith(("protocolSection", "documentSection")):
+            raise ArithmeticFailure(
+                f"{cid} has no declared field path. The report promises every "
+                f"verdict traces to one. Refusing to write.")
         out.append({"cid": cid, "base": re.sub(r"[ab]$", "", cid),
                     "category": cat, "name": name,
                     "verdict": verdict, "path": path, "lines": lines})
@@ -220,6 +250,12 @@ def assert_refusal(text):
 
 
 def render(a, b, nct_a, nct_b, snap_a, snap_b):
+    # Provenance FIRST, so a missing chain of custody stops the render before
+    # any verdict is computed. An unprovenanced report that renders anyway is
+    # this project's own failure shape at the last layer: correct verdicts,
+    # no traceability, and nothing on the page to say so.
+    prov = [provenance.facts(nct_a, snap_a, a),
+            provenance.facts(nct_b, snap_b, b)]
     rows, lv = comparisons(a, b)
     total, by_verdict, by_category = assert_arithmetic(rows)
     checks = len({r["base"] for r in rows})
@@ -340,6 +376,88 @@ def render(a, b, nct_a, nct_b, snap_a, snap_b):
       "populations and the registry will not show it.")
     w("")
 
+    w("## Provenance")
+    w("")
+    w("Every verdict above traces to a field path in a dated snapshot "
+      "committed to this repository. The snapshots are the fixture: a "
+      "stranger runs this without network access.")
+    w("")
+    pa, pb = prov
+    w(f"| | A · {pa['nct']} | B · {pb['nct']} |")
+    w("|---|---|---|")
+    for label, key in (
+            ("snapshot file", "file"),
+            ("retrieved (UTC)", "retrieved"),
+            ("HTTP status", "status"),
+            ("snapshot age at render", "age_days"),
+            ("response bytes", "response_bytes"),
+            ("file bytes on disk", "file_bytes"),
+            ("sha256(file) [:12]", "file_sha256_12"),
+            ("protocolSection fp [:12]", "protocol_fingerprint_12"),
+            ("sponsor last edited record", "sponsor_last_edited"),
+            ("fingerprint", "verified")):
+        va, vb = pa[key], pb[key]
+        if key == "age_days":
+            va, vb = f"{va} days", f"{vb} days"
+        elif key in ("response_bytes", "file_bytes"):
+            va, vb = f"{va:,}", f"{vb:,}"
+        w(f"| {label} | {va} | {vb} |")
+    w("")
+    w("**`response bytes` and `file bytes` measure different things and are "
+      "never merged.** The first is the API response as received and logged; "
+      "the second is the file on disk after `fetch.py` pretty-prints the "
+      "JSON, which nearly doubles it. See `KNOWN-LIMITATIONS.md`, L8.")
+    w("")
+    w("**`fingerprint` says whether the hash can be trusted as a tamper "
+      "check.** `provenance.json` records a fingerprint at *fetch* time, "
+      "from the bytes as received. Snapshots marked **computed post hoc** "
+      "predate that file, so their hashes were computed from the very files "
+      "they would be checking — agreement is by construction and proves "
+      "nothing. A checksum generated from the thing it checks is decoration, "
+      "and saying so costs one row. Tamper detection is live from the next "
+      "fetch onward.")
+    w("")
+    stale = {}
+    sp = HERE / "staleness.json"
+    if sp.exists():
+        try:
+            stale = json.loads(sp.read_text())
+        except json.JSONDecodeError:
+            stale = {}
+    if stale:
+        w(f"**Staleness, checked against the live registry "
+          f"{stale.get('checked', '(unknown)')}** — by `resume-check.py`, "
+          f"whose verdicts are recorded in `staleness.json`. This report has "
+          f"no network of its own and cites that file rather than guessing.")
+        w("")
+        recs = stale.get("records", {})
+        for n in (pa["nct"], pb["nct"]):
+            rec = recs.get(n)
+            if not rec:
+                w(f"- `{n}` — not covered by the last staleness check.")
+            elif rec.get("verdict") == "CURRENT":
+                w(f"- `{n}` — **CURRENT** at the time of that check.")
+            else:
+                mods = ", ".join(rec.get("changed_modules") or []) or "not named"
+                w(f"- `{n}` — **STALE**. The snapshot cited above says the "
+                  f"sponsor last edited it {rec.get('saved_last_edited')}; the "
+                  f"registry said {rec.get('registry_last_edited')}. Modules "
+                  f"changed: {mods}. **The snapshot is kept deliberately** — a "
+                  f"dated snapshot that no longer matches the registry is "
+                  f"still a valid object of study, provided the report says "
+                  f"it is stale rather than pretending it is current.")
+        w("")
+    else:
+        w("**Staleness: UNVERIFIED.** No `staleness.json` present, so this "
+          "report cannot say whether the registry has moved since these "
+          "snapshots were taken. Run `python3 resume-check.py`.")
+        w("")
+
+    w("Reproducing this report: clone, then `python3 report.py`. The output "
+      "is byte-identical except the `Rendered` line in the header, which "
+      "carries the render timestamp.")
+    w("")
+
     w("## Verdict legend")
     w("")
     w("Generated from the verdict constants in the code at render time, not "
@@ -354,14 +472,51 @@ def render(a, b, nct_a, nct_b, snap_a, snap_b):
     return text, rows, total, by_verdict, by_category
 
 
-def load():
+def load(ids=None):
+    """Newest snapshot per NCT ID.
+
+    `ids` NAMES the records to compare. Added 14 Oct 2026 by S9, because the
+    spec's first line is "Input: a set of NCT IDs" and for eight sessions the
+    input was actually "whichever files happen to be in data/". With one pair
+    in the folder the two are indistinguishable. With two pairs they are not:
+    the glob would silently compare the two lowest-numbered IDs, across
+    indications, and report thirteen confident verdicts about it. See L9.
+    """
     f = re.compile(r"^(NCT\d+)_(\d{4}-\d{2}-\d{2})\.json$")
     best = {}
     for p in sorted(DATA.glob("*.json")):
         m = f.match(p.name)
         if m and (m.group(1) not in best or best[m.group(1)][0] < m.group(2)):
             best[m.group(1)] = (m.group(2), p)
+
+    if ids:
+        missing = [i for i in ids if i not in best]
+        if missing:
+            raise SystemExit(
+                f"No snapshot in data/ for: {', '.join(missing)}\n"
+                f"Available: {', '.join(sorted(best))}\n"
+                f"Fetch them first:  python3 fetch.py {' '.join(ids)}")
+        chosen = [(i, best[i][0], json.loads(best[i][1].read_text())) for i in ids]
+        return chosen
+
+    if len(best) > 2:
+        raise SystemExit(
+            f"data/ holds snapshots for {len(best)} trials: "
+            f"{', '.join(sorted(best))}\n"
+            f"Which two should be compared? Name them:\n"
+            f"  python3 report.py --ids NCT... NCT...\n"
+            f"Refusing to guess - picking two by filename order would compare "
+            f"records that may have nothing to do with each other and report "
+            f"thirteen confident verdicts about it. See L9.")
     return [(n, v[0], json.loads(v[1].read_text())) for n, v in sorted(best.items())]
+
+
+def ids_from_argv(argv):
+    if "--ids" not in argv:
+        return None
+    i = argv.index("--ids")
+    ids = [a for a in argv[i + 1:] if a.startswith("NCT")]
+    return ids or None
 
 
 def summary(total, by_verdict, by_category, checks):
@@ -375,8 +530,15 @@ def summary(total, by_verdict, by_category, checks):
     return "\n".join(out)
 
 
+# The acceptance harness is PINNED to the orexin fixture. Every criterion in
+# acceptance/ is evidence against these two snapshots; letting the selftest
+# pick up whatever is in data/ would silently repoint seven sessions of
+# recorded known answers.
+FIXTURE = ["NCT06470828", "NCT07455383"]
+
+
 def selftest():
-    s = load()
+    s = load(FIXTURE)
     (na, sa, a), (nb, sb, b) = s[0], s[1]
 
     def head(n, t):
@@ -465,7 +627,7 @@ if __name__ == "__main__":
         else:
             selftest()
     else:
-        s = load()
+        s = load(ids_from_argv(sys.argv))
         (na, sa, a), (nb, sb, b) = s[0], s[1]
         text, rows, total, bv, bc = render(a, b, na, nb, sa, sb)
         OUT.write_text(text)

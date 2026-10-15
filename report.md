@@ -2,7 +2,7 @@
 
 **A** · [NCT06470828](https://clinicaltrials.gov/study/NCT06470828) · snapshot 2026-09-14  
 **B** · [NCT07455383](https://clinicaltrials.gov/study/NCT07455383) · snapshot 2026-09-14  
-Rendered 2026-10-04 21:01:27Z · **11 checks / 13 comparisons**
+Rendered 2026-10-15 12:22:32Z · **11 checks / 13 comparisons**
 
 This report names where two registered trials are not measuring the same thing in the same patients. It reports counts and field values. It does not reach a conclusion about either trial — see *What this report will not say*, below.
 
@@ -64,7 +64,7 @@ Every NOT REPORTED below may reflect this rather than a sponsor's disclosure pra
 
 | Check | | Verdict | Field |
 |---|---|---|---|
-| C2 | minimum age | **DIFFERENT** | `(path not reported)` |
+| C2 | minimum age | **DIFFERENT** | `protocolSection.eligibilityModule.minimumAge` |
 | C3 | maximum age | **SAME** | `protocolSection.eligibilityModule.maximumAge` |
 | C4 | sex eligible | **SAME** | `protocolSection.eligibilityModule.sex` |
 | C5 | main measurement | **REVIEW** | `protocolSection.outcomesModule.primaryOutcomes[0].measure` |
@@ -109,6 +109,34 @@ Three boundaries worth naming explicitly:
 - **A document-presence field attests existence, not completeness.** 42 CFR 11.48(a)(5) permits redacting trade secret and confidential commercial information before submission, so a posted statistical analysis plan may have its model redacted. See `KNOWN-LIMITATIONS.md`, L4.
 - **Free-text eligibility criteria are not parsed.** They are printed verbatim elsewhere under *human read required*, and no claim is made.
 - **The assay behind an eligibility threshold is absent from every field path, permanently.** Two trials can enrol materially different populations and the registry will not show it.
+
+## Provenance
+
+Every verdict above traces to a field path in a dated snapshot committed to this repository. The snapshots are the fixture: a stranger runs this without network access.
+
+| | A · NCT06470828 | B · NCT07455383 |
+|---|---|---|
+| snapshot file | NCT06470828_2026-09-14.json | NCT07455383_2026-09-14.json |
+| retrieved (UTC) | 2026-09-14T11:15:22+00:00 | 2026-09-14T11:15:22+00:00 |
+| HTTP status | 200 | 200 |
+| snapshot age at render | 31 days | 31 days |
+| response bytes | 57,613 | 14,574 |
+| file bytes on disk | 101,421 | 23,120 |
+| sha256(file) [:12] | 94b4173acf06 | d052ce3b83e5 |
+| protocolSection fp [:12] | eafee41b7c33 | ec68dfcd1377 |
+| sponsor last edited record | 2026-08-31 | 2026-09-03 |
+| fingerprint | computed post hoc — not independently verified | computed post hoc — not independently verified |
+
+**`response bytes` and `file bytes` measure different things and are never merged.** The first is the API response as received and logged; the second is the file on disk after `fetch.py` pretty-prints the JSON, which nearly doubles it. See `KNOWN-LIMITATIONS.md`, L8.
+
+**`fingerprint` says whether the hash can be trusted as a tamper check.** `provenance.json` records a fingerprint at *fetch* time, from the bytes as received. Snapshots marked **computed post hoc** predate that file, so their hashes were computed from the very files they would be checking — agreement is by construction and proves nothing. A checksum generated from the thing it checks is decoration, and saying so costs one row. Tamper detection is live from the next fetch onward.
+
+**Staleness, checked against the live registry 2026-10-15T12:22:20Z** — by `resume-check.py`, whose verdicts are recorded in `staleness.json`. This report has no network of its own and cites that file rather than guessing.
+
+- `NCT06470828` — **CURRENT** at the time of that check.
+- `NCT07455383` — **STALE**. The snapshot cited above says the sponsor last edited it 2026-09-03; the registry said 2026-10-07. Modules changed: contactsLocationsModule, statusModule. **The snapshot is kept deliberately** — a dated snapshot that no longer matches the registry is still a valid object of study, provided the report says it is stale rather than pretending it is current.
+
+Reproducing this report: clone, then `python3 report.py`. The output is byte-identical except the `Rendered` line in the header, which carries the render timestamp.
 
 ## Verdict legend
 

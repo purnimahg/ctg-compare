@@ -15,6 +15,7 @@ Exit codes:  0 = all current   1 = could not check   2 = something is stale
 """
 
 import hashlib
+from datetime import datetime, timezone
 import json
 import re
 import sys
@@ -59,7 +60,7 @@ def protocol_fingerprint(record):
 
 
 def live_state(nct_ids):
-    """Full records, so we can fingerprint them. Returns {nct: (date, fingerprint)}."""
+    """Full records. Returns {nct: (date, fingerprint, record)}."""
     out = {}
     for nct in nct_ids:
         url = f"{BASE}/{nct}?format=json"
@@ -68,8 +69,31 @@ def live_state(nct_ids):
         out[nct] = (
             rec["protocolSection"]["statusModule"]["lastUpdatePostDateStruct"]["date"],
             protocol_fingerprint(rec),
+            rec,
         )
     return out
+
+
+def changed_modules(old_rec, new_rec):
+    """Which top-level protocolSection modules differ. Added 15 Oct 2026 for L7.
+
+    The fingerprint covers ALL of protocolSection, including
+    referencesModule, which accumulates registry-generated PubMed citations.
+    So STALE will fire on an auto-linked paper, and that is not a protocol
+    amendment. Narrowing the fingerprint would risk missing a sponsor edit to
+    references, so the noise is not reduced - it is made LEGIBLE:
+
+        STALE: referencesModule                  a paper got auto-linked
+        STALE: eligibilityModule, outcomesModule a real amendment
+
+    A check that fires on nothing gets ignored, then fires on something real
+    and is still ignored. Naming the module is the whole fix.
+    """
+    o, n = old_rec.get("protocolSection", {}), new_rec.get("protocolSection", {})
+    keys = sorted(set(o) | set(n))
+    return [k for k in keys
+            if json.dumps(o.get(k), sort_keys=True)
+            != json.dumps(n.get(k), sort_keys=True)]
 
 
 def main():
@@ -89,13 +113,14 @@ def main():
         sys.exit(1)
 
     stale = []
+    record_staleness = {}
     pad = " " * 13
     for nct in sorted(local):
         fetched, saved_upd, path, saved_fp = local[nct]
         if nct not in live:
             print(f"  {nct}   ?         the registry did not return this trial")
             continue
-        now_upd, now_fp = live[nct]
+        now_upd, now_fp, now_rec = live[nct]
         date_same = (now_upd == saved_upd)
         content_same = (now_fp == saved_fp)
 
@@ -103,6 +128,10 @@ def main():
             print(f"  {nct}   CURRENT")
             print(f"{pad}sponsor last edited {saved_upd}; content unchanged "
                   f"(you fetched {fetched})")
+            record_staleness[nct] = {
+                "verdict": "CURRENT", "snapshot": path.name, "fetched": fetched,
+                "saved_last_edited": saved_upd, "registry_last_edited": now_upd,
+                "changed_modules": []}
             continue
 
         stale.append(nct)
@@ -111,12 +140,32 @@ def main():
             print(f"{pad}SPONSOR EDIT  your copy says {saved_upd}, registry says {now_upd}")
         else:
             print(f"{pad}sponsor edit date unchanged ({saved_upd})")
+        mods = []
         if not content_same:
             print(f"{pad}CONTENT       protocolSection differs "
                   f"({saved_fp} -> {now_fp})")
+            mods = changed_modules(json.loads(path.read_text()), now_rec)
+            print(f"{pad}MODULES       {', '.join(mods) if mods else '(none named)'}")
+            if mods == ["referencesModule"]:
+                print(f"{pad}              referencesModule ONLY - this is very likely a")
+                print(f"{pad}              registry-generated citation, not a protocol")
+                print(f"{pad}              amendment. See KNOWN-LIMITATIONS.md L1 and L7.")
             if date_same:
                 print(f"{pad}              changed WITHOUT a sponsor edit - this is a"
                       f" registry-side edit. See KNOWN-LIMITATIONS.md L1.")
+        record_staleness[nct] = {
+            "verdict": "STALE", "snapshot": path.name, "fetched": fetched,
+            "saved_last_edited": saved_upd, "registry_last_edited": now_upd,
+            "saved_fingerprint": saved_fp, "registry_fingerprint": now_fp,
+            "changed_modules": mods}
+
+    # Write the verdicts where report.py can cite them. S8 Q5: the report must
+    # SAY a snapshot is stale rather than pretend it is current - and it has no
+    # network of its own, so this file is the only way it can know.
+    (HERE / "staleness.json").write_text(json.dumps(
+        {"checked": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+         "records": record_staleness}, indent=2, sort_keys=True) + "\n")
+    print(f"Verdicts written to staleness.json (report.py cites it).")
 
     print()
     if stale:

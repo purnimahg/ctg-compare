@@ -5,20 +5,49 @@ ctg-compare - step 1: fetch
 Downloads the ClinicalTrials.gov record for each trial ID in TRIALS and
 saves one file per trial into data/, stamped with today's date.
 
-Run:  python3 fetch.py
+Run:  python3 fetch.py                            the default orexin pair
+      python3 fetch.py NCT01234567 NCT07654321   any trials you name
 """
 
 import json
+import re
 import sys
 import urllib.request
 import urllib.error
 from datetime import datetime, timezone
 from pathlib import Path
 
-TRIALS = [
+import provenance
+
+# The DEFAULT pair - the orexin Ph3 fixture every acceptance record in this
+# repo is evidence against. It is a default, not the subject.
+DEFAULT_TRIALS = [
     "NCT06470828",   # Takeda   - TAK-861 / oveporexton
     "NCT07455383",   # Alkermes - ALKS 2680 / alixorexton
 ]
+
+NCT = re.compile(r"^NCT\d{8}$")
+
+
+def trials_from_argv(argv):
+    """Any NCT IDs on the command line replace the default pair.
+
+    Added 14 Oct 2026, by S9. Until then TRIALS was a hard-coded list, which
+    made the FETCHER domain-specific even though every CHECK is domain-
+    agnostic - and a stranger reading the code would have been right not to
+    believe the claim. See L9.
+    """
+    ids = [a for a in argv[1:] if not a.startswith("-")]
+    if not ids:
+        return DEFAULT_TRIALS, "default orexin pair"
+    bad = [i for i in ids if not NCT.match(i)]
+    if bad:
+        die(f"Not an NCT ID: {', '.join(bad)}\n"
+            f"Expected the form NCT12345678. Nothing was fetched.")
+    if len(ids) < 2:
+        die(f"Give at least two NCT IDs - a comparison needs two records.\n"
+            f"Got: {', '.join(ids)}. Nothing was fetched.")
+    return ids, "from the command line"
 
 BASE = "https://clinicaltrials.gov/api/v2/studies"
 HERE = Path(__file__).resolve().parent
@@ -45,13 +74,15 @@ def die(message):
 
 def main():
     DATA.mkdir(exist_ok=True)
+    trials, source = trials_from_argv(sys.argv)
+    print(f"fetching {len(trials)} record(s), {source}\n")
     stamp = datetime.now(timezone.utc)
     datestr = stamp.strftime("%Y-%m-%d")
 
     log_lines = []
     saved = []
 
-    for nct_id in TRIALS:
+    for nct_id in trials:
         print(f"fetching {nct_id} ... ", end="", flush=True)
 
         try:
@@ -80,6 +111,15 @@ def main():
         out.write_text(json.dumps(record, indent=2), encoding="utf-8")
         saved.append(out)
 
+        # Record the fingerprint FROM THE BYTES AS RECEIVED, before anything
+        # else touches them. This is the only moment at which a hash is
+        # independent of the file it will later be used to check - which is
+        # the whole difference between provenance and decoration. See L8/L9
+        # and provenance.py.
+        provenance.record_fetch(
+            nct_id, datestr, provenance.protocol_fingerprint(record),
+            len(raw), stamp.isoformat(timespec="seconds"))
+
         updated = record["protocolSection"]["statusModule"]["lastUpdatePostDateStruct"]["date"]
         print(f"ok   ({len(raw):,} bytes; sponsor last edited this record {updated})")
 
@@ -97,6 +137,7 @@ def main():
         print(f"   {p.name}")
     print("")
     print("Retrieval details appended to  retrieval_log.txt")
+    print("Fingerprints recorded in       provenance.json")
 
 
 if __name__ == "__main__":

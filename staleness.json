@@ -1,0 +1,42 @@
+{
+  "checked": "2026-10-15T12:22:20Z",
+  "records": {
+    "NCT02924727": {
+      "changed_modules": [],
+      "fetched": "2026-10-15",
+      "registry_last_edited": "2023-06-22",
+      "saved_last_edited": "2023-06-22",
+      "snapshot": "NCT02924727_2026-10-15.json",
+      "verdict": "CURRENT"
+    },
+    "NCT04023552": {
+      "changed_modules": [],
+      "fetched": "2026-10-15",
+      "registry_last_edited": "2026-08-28",
+      "saved_last_edited": "2026-08-28",
+      "snapshot": "NCT04023552_2026-10-15.json",
+      "verdict": "CURRENT"
+    },
+    "NCT06470828": {
+      "changed_modules": [],
+      "fetched": "2026-09-14",
+      "registry_last_edited": "2026-08-31",
+      "saved_last_edited": "2026-08-31",
+      "snapshot": "NCT06470828_2026-09-14.json",
+      "verdict": "CURRENT"
+    },
+    "NCT07455383": {
+      "changed_modules": [
+        "contactsLocationsModule",
+        "statusModule"
+      ],
+      "fetched": "2026-09-14",
+      "registry_fingerprint": "0d7e574ee67f",
+      "registry_last_edited": "2026-10-07",
+      "saved_fingerprint": "ec68dfcd1377",
+      "saved_last_edited": "2026-09-03",
+      "snapshot": "NCT07455383_2026-09-14.json",
+      "verdict": "STALE"
+    }
+  }
+}

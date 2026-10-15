@@ -273,3 +273,77 @@ saving, which nearly doubles it.
 wrong number of exactly the kind this tool exists to catch — plausible,
 unverifiable at a glance, and off by 76%. S8 names them separately:
 `response bytes` and `file bytes`.
+
+
+## L9 — the spec's first line was not implemented. Found 14 Oct 2026 by S9.
+
+The artifact specification opens:
+
+> **Input: a set of NCT IDs.**
+
+It was not. For eight sessions the input was *"whichever JSON files happen to
+be in `data/`"*. Five copies of `load()` globbed the directory and took the
+newest snapshot per ID.
+
+**With one pair in the folder those two things are indistinguishable.** With
+two pairs they are not: `sorted(best.items())` would hand `report.py` the two
+lowest-numbered NCT IDs — potentially one orexin trial and one trial from a
+different disease entirely — and the renderer would produce thirteen
+confident verdicts comparing them. Every check would be correct. The
+comparison would be meaningless.
+
+● **Found by the session designed to find it.** S9 exists to prove the tool
+is domain-agnostic, and the first thing that happens when you try to point it
+at a second disease is that you cannot: there is no way to say which two
+records you mean. The claim in the spec and the behaviour of the code had
+diverged, and only an attempt to use it as specified could show that.
+
+● It also means the `fetch.py` TRIALS list made the **fetcher**
+domain-specific while every **check** was domain-agnostic. A stranger reading
+`fetch.py` would have been right not to believe the README.
+
+**Fix, 14 Oct:**
+
+1. `fetch.py` takes NCT IDs on the command line; the orexin pair is a
+   documented default, not the subject.
+2. `report.py` takes `--ids NCT… NCT…`, and **refuses to run** when `data/`
+   holds more than two trials and no pair is named. Refusing is the point:
+   guessing from filename order is how a tool produces a precise answer to a
+   question nobody asked.
+
+**Deliberately NOT fixed before ship:** the five `load()` copies in
+`check_c2/s4/s5/s6` and `report.py` are not consolidated. Each checker's
+`--selftest` stays pinned to the orexin fixture on purpose — those runs are
+the acceptance evidence for S3 through S7, and repointing them three days
+before ship would invalidate seven sessions of recorded known answers. The
+TOOL takes named IDs; the HARNESSES stay bound to the fixture. Consolidation
+is v0.2.
+
+
+## L10 — provenance was recovered from the display layer. FIXED 15 Oct 2026.
+
+**Found on ship day, by S9, by reading the rendered table on an unfamiliar
+pair — not by any test.**
+
+`report.py` built each row's field path by scanning the checker's output
+lines for the first one starting `protocolSection` or `documentSection`.
+`check_c2` does not print its path in that form, so C2's row rendered as:
+
+    | C2 | minimum age | **SAME** | `(path not reported)` |
+
+while the report's own Provenance section promised *"every verdict traces to
+a field path in a dated snapshot"*. For C2 that was **false**, in the
+shipping report, in both the orexin and cardiology renders.
+
+● Two things worth keeping from this.
+
+**Provenance must be DECLARED, not RECOVERED.** A field path scraped out of
+rendered text is one formatting change away from vanishing — and it vanishes
+into a plausible-looking string rather than an error. Every row now declares
+its path as data, and the renderer **refuses to write** if any row lacks one.
+
+**It was found by looking at output on data nobody had tuned against.** The
+same defect sat in the orexin render the day before and went unseen, because
+a familiar table is read for what you expect it to say. S9's purpose was to
+prove domain-independence; its actual yield was a false claim in the
+provenance layer.

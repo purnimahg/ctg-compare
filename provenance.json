@@ -1,0 +1,18 @@
+{
+  "NCT02924727_2026-10-15": {
+    "nct": "NCT02924727",
+    "protocol_fingerprint": "0151d7332105",
+    "recorded": "at fetch",
+    "response_bytes": 430701,
+    "retrieved": "2026-10-15T12:01:00+00:00",
+    "snapshot": "2026-10-15"
+  },
+  "NCT04023552_2026-10-15": {
+    "nct": "NCT04023552",
+    "protocol_fingerprint": "cfab0e217eaa",
+    "recorded": "at fetch",
+    "response_bytes": 148708,
+    "retrieved": "2026-10-15T12:01:00+00:00",
+    "snapshot": "2026-10-15"
+  }
+}
