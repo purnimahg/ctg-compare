@@ -230,7 +230,7 @@ it would have reasoned from a false model.
 
 ---
 
-## L7 — `resume-check.py` will cry wolf. OPEN as of 12 Oct 2026.
+## L7 — `resume-check.py` will cry wolf. FIXED 15 Oct 2026.
 
 Direct consequence of the L1 correction.
 
@@ -250,7 +250,21 @@ check that fires on nothing gets ignored, and then fires on something real
 and still gets ignored. **A false-positive source in a staleness check is how
 a tool stops being read.**
 
-**Fix, scheduled into S8:** keep the fingerprint over all of
+**Status: FIXED 15 Oct 2026.** `resume-check.py` now prints a `MODULES` line
+naming every top-level `protocolSection` module whose contents changed, and
+says so explicitly when `referencesModule` is the only one. First live use,
+the same day, on NCT07455383: `MODULES contactsLocationsModule,
+statusModule` — a real sponsor amendment, legible in two seconds instead of a
+23,000-line diff.
+
+● **This heading read OPEN for two days after the code was fixed, including
+through the public push.** A document that says a defect is open when it is
+closed is the same failure as L1's wrong reason and the course artifact's four
+verdict states: the record disagreeing with the thing it describes. Corrected
+17 Oct, and noted rather than quietly edited, because the pattern is the
+finding.
+
+**The fix:** keep the fingerprint over all of
 `protocolSection` — narrowing it risks missing a sponsor edit to references —
 and make STALE carry a REASON: which top-level modules changed. A line
 reading `STALE: referencesModule only (DERIVED citation added)` is
@@ -273,6 +287,10 @@ saving, which nearly doubles it.
 wrong number of exactly the kind this tool exists to catch — plausible,
 unverifiable at a glance, and off by 76%. S8 names them separately:
 `response bytes` and `file bytes`.
+
+**Status: FIXED 15 Oct 2026.** `provenance.py` returns the two as separate
+fields and `report.md` prints both rows with a note that they measure
+different things. **This entry carried no status line at all until 17 Oct.**
 
 
 ## L9 — the spec's first line was not implemented. Found 14 Oct 2026 by S9.
@@ -347,3 +365,34 @@ same defect sat in the orexin render the day before and went unseen, because
 a familiar table is read for what you expect it to say. S9's purpose was to
 prove domain-independence; its actual yield was a false claim in the
 provenance layer.
+
+
+---
+
+## Status summary — added 17 Oct 2026
+
+    L1   FIXED 14 Sep   (stated reason CORRECTED 12 Oct)
+    L2   OPEN  by design — diff tooling only; not a defect in the 11 checks
+    L3   OPEN  by design — accepted, disclosed in every C5/C6 verdict
+    L4   OPEN  permanently for v0.1 — the tool does not open PDFs
+    L5   FIXED  3 Oct
+    L6   FIXED  3 Oct
+    L7   FIXED 15 Oct   (its own heading said OPEN until 17 Oct)
+    L8   FIXED 15 Oct   (had no status line until 17 Oct)
+    L9   FIXED 14 Oct
+    L10  FIXED 15 Oct
+
+**Six fixed. Three open deliberately, with the reasoning published. One was
+fixed in code while its own heading said OPEN.**
+
+● **This file is not a defect backlog, and closing L2, L3 and L4 would make
+the tool worse.** L3's "fix" reverts C6 to REVIEW and breaks a verdict that
+currently works. L4 would require opening PDFs and judging redactions — the
+adjudication this tool exists to refuse. L2 is a property of the diff helper,
+not of any of the eleven checks.
+
+A reader who finds three limitations stated with their trade-offs has more
+reason to trust the eleven verdicts, not less. **The record of what the tool
+refuses to do is the asset.** What was actually broken here was the
+bookkeeping about the record — twice — which is the same thing that went wrong
+five times during the build.
