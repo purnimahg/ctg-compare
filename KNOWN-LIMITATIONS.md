@@ -366,6 +366,40 @@ a familiar table is read for what you expect it to say. S9's purpose was to
 prove domain-independence; its actual yield was a false claim in the
 provenance layer.
 
+## L11 — the maturity guard depends on a field the registry does not validate. OPEN by design.
+
+**Found 26 Oct 2026 by asking someone outside the project — not by any test,
+and not by me.**
+
+The maturity guard withholds `NOT REPORTED (M)` unless
+`primaryCompletionDateStruct.type` reads `ACTUAL`. The guard treats that flag
+as evidence that primary completion has genuinely occurred.
+
+It is not evidence. The actual/estimated flag is maintained by the party
+responsible for the record, not validated by ClinicalTrials.gov. A trial whose
+primary completion passed months ago can still read `ESTIMATED` because nobody
+went back and changed it.
+
+**Consequence: the guard under-flags.** Where the flag is stale, the tool
+stays silent on a trial it should have marked as maturity-confounded. The
+failure is invisible — a missing `(M)`, not an error.
+
+● **The guard is not correct because the field is correct.** It is defensible
+because the dependency is declared. That distinction is the whole of this
+entry.
+
+● **Why this stays OPEN.** The fix would be to override the sponsor from the
+date — to decide the record is wrong. That is adjudication, which this tool
+refuses for the same reason as L4. What a later version *can* do without
+adjudicating is report the contradiction: a primary completion date in the
+past carrying an `ESTIMATED` flag is a fact about the record, and stating it
+resolves nothing. Flagging is in scope; deciding is not.
+
+● **L1 through L10 were found by my own discipline. This one was not.** It
+came from four sentences in a reply to a cold email, from someone who had
+published an analysis resting on the same field. Three weeks of acceptance
+criteria did not surface it, because no test I write can tell me what a
+registry field means upstream of the API.
 
 ---
 
@@ -381,9 +415,10 @@ provenance layer.
     L8   FIXED 15 Oct   (had no status line until 17 Oct)
     L9   FIXED 14 Oct
     L10  FIXED 15 Oct
+    L11  OPEN  by design — external dependency, disclosed
 
-**Six fixed. Three open deliberately, with the reasoning published. One was
-fixed in code while its own heading said OPEN.**
+**Seven fixed. Four open deliberately, with the reasoning published. One was
+fixed in code while its own heading said OPEN. One was found from outside.**
 
 ● **This file is not a defect backlog, and closing L2, L3 and L4 would make
 the tool worse.** L3's "fix" reverts C6 to REVIEW and breaks a verdict that
